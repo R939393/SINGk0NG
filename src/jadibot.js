@@ -79,8 +79,8 @@ async function JadiBot(conn, from, m, store) {
 					let botNumber = await client[from].decodeJid(client[from].user.id);
 					if (db.set[botNumber] && !db.set[botNumber]?.join) {
 						db.set[botNumber].original = false
-						if (my.ch.length > 0 && my.ch.includes('@newsletter')) {
-							if (my.ch) await client[from].newsletterMsg(my.ch, { type: 'follow' }).catch(e => {})
+						 {
+							
 							db.set[botNumber].join = true
 						}
 					}
@@ -106,7 +106,7 @@ async function JadiBot(conn, from, m, store) {
 		
 			
 			client[from].ev.on('messages.upsert', async (message) => {
-				await MessagesUpsert(client[from], message, store);
+				MessagesUpsert(client[from], message, store);
 			});
 		
 			return client[from]
