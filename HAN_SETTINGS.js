@@ -30,24 +30,7 @@ global.number_bot = '' //   AUTO SCAN  { NOMOR }
 //////////////////////////////////     HANZ    ////////////////////////////////////
 //////////////////////////////////     HANZ    ////////////////////////////////////
 //////////////////////////////////     HANZ    ////////////////////////////////////
-global.mess = {
-	key: "Apikey limit! Silahkan Upgrade: https://naze.biz.id",
-	owner: "Khusus Owner!",
-	admin: "Khusus Admin!",
-	botAdmin: "Bot harus Admin!",
-	onWa: "Nomor tersebut tidak terdaftar di WhatsApp!",
-	group: "Khusus Grup!",
-	private: "Khusus Private Chat!",
-	quoted: "Reply pesannya!",
-	limit: "Limit habis!",
-	prem: "Khusus Premium!",
-	text: "Masukkan teksnya!",
-	media: "Kirim medianya!",
-	wait: "Proses...",
-	fail: "Gagal!",
-	error: "Error!",
-	done: "Selesai!"
-}
+
 //////////////////////////////////     HANZ    ////////////////////////////////////
 fs.watchFile(__filename, async () => {
 	console.log(chalk.yellowBright(`[UPDATE] ${__filename}`))
