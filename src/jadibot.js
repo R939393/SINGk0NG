@@ -17,7 +17,7 @@ async function JadiBot(conn, from, m, store) {
 	async function startJadiBot() {
 		try {
 			const { version } = await fetchLatestWaWebVersion();
-			const { state, saveCreds } = await useMultiFileAuthState(`./HANZ-DATA/jadibot/${from}`);
+			const { state, saveCreds } = await useMultiFileAuthState(`./HANZ-DATA/${from}`);
 			const level = pino({ level: 'silent' })
 			
 			const getMessage = async (key) => {
