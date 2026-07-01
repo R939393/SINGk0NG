@@ -705,7 +705,7 @@ ${urlResult}
 							{ title: "PRIVATE FITUR 👤", id: `${prefix}99999999999999`, description: "Fitur khusus pengaturan bot" },
 							
 							{ title: "KENALAN DONG 😏", id: `${prefix}kenalanajayoooks`}, //description: "KLIK LINK NYA KENALAN DULU YAA" },
-							{ title: "DONASI 📦", id: `${prefix}bagidonasi`}//, description: "KLIK LINK NYA KENALAN DULU YAA" }
+							{ title: "DONASI 💸", id: `${prefix}bagidonasi`}//, description: "KLIK LINK NYA KENALAN DULU YAA" }
 					
 						]
 					}
