@@ -19,7 +19,7 @@ global.author = 'BIJIK SUMANTO'
 global.packname = 'UMAT KENTER'
 //////////////////////////////////     HANZ    ////////////////////////////////////
 global.timezone = 'Asia/Makassar' 
-global.locale = 'en' 
+global.locale = 'id' 
 //////////////////////////////////     HANZ    ////////////////////////////////////
 global.listprefix = ["+","!","."]
 global.listv = ['•','●','■','✿','▲','➩','➢','➣','➤','✦','✧','△','❀','○','□','♤','♡','◇','♧','々','〆']
