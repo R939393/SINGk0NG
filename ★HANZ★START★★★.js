@@ -324,9 +324,11 @@ OPSI DIBAWAH
                     mimetype: 'audio/ogg; codecs=opus',
                     ptt: true,
                     seconds: 999999999
-                }, { quoted: msg })
-                
-                
+					});
+
+
+
+				
             }
         }
     });
