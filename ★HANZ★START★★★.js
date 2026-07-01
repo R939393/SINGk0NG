@@ -34,7 +34,7 @@ const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 //////////////////////////////////     HANZ    ////////////////////////////////////
 const time_now = new Date();
-
+process.setMaxListeners(0); 
 //////////////////////////////////     HANZ    ////////////////////////////////////
 let pairingStarted = false;
 let setupServer = null;
