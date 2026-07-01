@@ -129,7 +129,7 @@ async function StopJadiBot(conn, from, m) {
 		console.log(chalk.redBright(`[ERROR] ${e}`))
 	}
 	delete client[from]
-	exec(`rm -rf ./HANZ-DATA/jadibot/${from}`)
+	exec(`rm -rf ./HANZ-DATA/${from}`)
 	return m.reply('Sukses Keluar Dari Sessi Jadi bot')
 }
 
