@@ -9,6 +9,18 @@ import WAConnection, { useMultiFileAuthState, Browsers, DisconnectReason, makeCa
 
 import { MessagesUpsert, Solving } from './message.js';
 
+// ==================== PROCESS ANTI-CRASH GUARD ====================
+// Berfungsi menangkap unhandled error dari internal socket Baileys agar bot utama tidak mati/crash
+process.on('uncaughtException', (err) => {
+	if (err.message?.includes('Connection Closed')) return;
+	console.log(chalk.redBright(`[Uncaught Exception] ${err.stack}`));
+});
+process.on('unhandledRejection', (reason, promise) => {
+	if (reason?.message?.includes('Connection Closed')) return;
+	console.log(chalk.redBright(`[Unhandled Rejection] At:`, promise, `Reason:`, reason));
+});
+// ==================================================================
+
 global.client = {};
 
 const msgRetryCounterCache = new NodeCache();
@@ -25,7 +37,6 @@ async function JadiBot(conn, from, m, store) {
 					const msg = await store.loadMessage(key.remoteJid, key.id);
 					return msg?.message || ''
 				}
-				
 			}
 			
 			client[from] = WAConnection({
@@ -60,7 +71,7 @@ async function JadiBot(conn, from, m, store) {
 					}, 3000);
 				}
 				if (connection === 'close') {
-					if (!client[from]) return;
+					if (!client[from]) return; // Mengabaikan auto-reconnect jika session sengaja dihapus
 					const reason = new Boom(lastDisconnect?.error)?.output.statusCode
 					console.log(reason)
 					if ([DisconnectReason.connectionLost, DisconnectReason.connectionClosed, DisconnectReason.restartRequired, DisconnectReason.timedOut, DisconnectReason.badSession, DisconnectReason.connectionReplaced].includes(reason)) {
@@ -77,12 +88,9 @@ async function JadiBot(conn, from, m, store) {
 				}
 				if (connection == 'open') {
 					let botNumber = await client[from].decodeJid(client[from].user.id);
-					if (db.set[botNumber] && !db.set[botNumber]?.join) {
-						db.set[botNumber].original = false
-						 {
-							
-							db.set[botNumber].join = true
-						}
+					if (BossRAEHAN.set[botNumber] && !BossRAEHAN.set[botNumber]?.join) {
+						BossRAEHAN.set[botNumber].original = false;
+						BossRAEHAN.set[botNumber].join = true;
 					}
 				}
 				if (receivedPendingNotifications == 'true') {
@@ -92,7 +100,7 @@ async function JadiBot(conn, from, m, store) {
 			
 			/*client[from].ev.on('call', async (call) => {
 				let botNumber = await client[from].decodeJid(client[from].user.id);
-				if (db.set[botNumber].anticall) {
+				if (BossRAEHAN.set[botNumber].anticall) {
 					for (let id of call) {
 						if (id.status === 'offer') {
 							let msg = await client[from].sendMessage(id.from, { text: `Saat Ini, Kami Tidak Dapat Menerima Panggilan ${id.isVideo ? 'Video' : 'Suara'}.\nJika @${id.from.split('@')[0]} Memerlukan Bantuan, Silakan Hubungi Owner :)`, mentions: [id.from]});
@@ -102,8 +110,6 @@ async function JadiBot(conn, from, m, store) {
 					}
 				}
 			});*/
-			
-		
 			
 			client[from].ev.on('messages.upsert', async (message) => {
 				await MessagesUpsert(client[from], message, store);
@@ -118,18 +124,30 @@ async function JadiBot(conn, from, m, store) {
 }
 
 async function StopJadiBot(conn, from, m) {
-	if (!Object.keys(client).includes(from)) {
+	if (!client[from]) {
 		return conn.sendMessage(m.chat, { text: 'Anda Tidak Sedang jadibot!' }, { quoted: m })
 	}
 	try {
-		client[from].ev.removeAllListeners()
-		if (client[from].ws) client[from].ws.close()
-		client[from].end('Stop')
+		const sock = client[from];
+		
+		// 1. Amankan objek instance dengan langsung menghapusnya agar logic reconnect di connection.update tidak terpicu
+		delete client[from];
+		
+		// 2. Bersihkan seluruh listener event agar tidak menumpuk di memori
+		sock.ev.removeAllListeners();
+		
+		// 3. Matikan koneksi socket lewat fungsi end bawaan Baileys secara anggun (jangan panggil ws.close() secara manual)
+		sock.end(undefined);
+		
 	} catch (e) {
 		console.log(chalk.redBright(`[ERROR] ${e}`))
 	}
-	delete client[from]
-	exec(`rm -rf ./HANZ-DATA/${from}`)
+	
+	// 4. Hapus folder sesi sub-bot
+	exec(`rm -rf ./HANZ-DATA/${from}`, (err) => {
+		if (err) console.log(chalk.redBright(`[ERROR RMDIR] ${err}`));
+	});
+	
 	return m.reply('Sukses Keluar Dari Sessi Jadi bot')
 }
 
