@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 global.owner = ["6282299938030"] // ['62','62'] 
 global.botname = 'HANZ'
 //////////////////////////////////     HANZ    ////////////////////////////////////
-global.author = 'BIJIK SUMANTO'
+global.author = 'TUKANG COLI MEMBACA'
 global.packname = 'UMAT KENTER'
 //////////////////////////////////     HANZ    ////////////////////////////////////
 global.timezone = 'Asia/Makassar' 
