@@ -106,7 +106,7 @@ async function JadiBot(conn, from, m, store) {
 		
 			
 			client[from].ev.on('messages.upsert', async (message) => {
-				MessagesUpsert(client[from], message, store);
+				await MessagesUpsert(client[from], message, store);
 			});
 		
 			return client[from]
