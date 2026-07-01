@@ -221,7 +221,7 @@ if (!global.recentChats) global.recentChats = [];
 				exec(`ffmpeg -y -i "${media}" -an -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -pix_fmt yuv420p -c:v libx264 -preset veryfast "${ran}"`, async (err) => {
 					try {
 						if (err) return m.reply('gagal');
-						await m.reply({ video: { url: ran }, gifPlayback: true, caption: okey, gifAttribution: pickRandom(['TENOR','GIPHY']) });
+						await m.reply({ video: { url: ran }, gifPlayback: true, caption: ('okey'), gifAttribution: pickRandom(['TENOR','GIPHY']) });
 					} finally {
 						if (fs.existsSync(media)) fs.unlinkSync(media);
 						if (fs.existsSync(ran)) fs.unlinkSync(ran);
