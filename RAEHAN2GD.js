@@ -503,103 +503,121 @@ https://www.instagram.com/hanz_932?igsh=Ymp6dTNjYzhtODFq
 			}
 			break;
 			case 'wastalk': {
-				if (!isCreator) return;
-				await sendLoading(m.chat, m);
-				try {
-					// 1. Validasi input agar tidak menghasilkan JID kosong/error
-					let num = m.quoted?.sender || m.mentionedJid?.[0] || text.replace(/[^0-9]/g, '');
-					if (!num || num.trim() === '') return m.reply(`Silahkan tag, reply, atau masukkan nomor target!\nContoh: ${prefix + command} 628xxx`);
-					
-					num = num.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
-					
-					// 2. Cek apakah nomor terdaftar di WA
-					let onWhatsApp = await RAEHAN2GD.onWhatsApp(num);
-					if (!onWhatsApp || !onWhatsApp[0]?.exists) return m.reply('Nomor tidak terdaftar di WhatsApp!');
-					
-					let img = await RAEHAN2GD.profilePictureUrl(num, 'image').catch(_ => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
-					let bio = await RAEHAN2GD.fetchStatus(num).catch(_ => ({}));
-					
-					// Fallback name jika method .getName() tidak tersedia di instance
-					let name = '-';
-					try {
-						name = await RAEHAN2GD.getName(num);
-					} catch (_) {
-						name = store?.contacts?.[num]?.name || store?.contacts?.[num]?.notify || '-';
-					}
-					
-					let business = await RAEHAN2GD.getBusinessProfile(num).catch(_ => null);
-					
-					// 3. Parsing nomor telepon & region secara aman
-					let country = "Unknown";
-					let formattedNum = num.split('@')[0];
+    if (!isCreator) return;
+    
+    // Validasi agar user tidak mengirim perintah kosong
+    if (!text && !m.quoted && !m.mentionedJid?.[0]) {
+        return m.reply(`Masukkan nomor target atau reply pesannya!\nContoh: ${prefix + command} 2577101400`);
+    }
+    
+    await sendLoading(m.chat, m);
+    
+    try {
+        let num = '';
+        let inputNumber = text ? text.replace(/[^0-9]/g, '') : '';
+        
+        // 1. PERBAIKAN LOGIKA: Prioritaskan angka yang diketik terlebih dahulu
+        if (inputNumber.length >= 7) {
+            num = inputNumber; 
+        } else if (m.quoted) {
+            num = m.quoted.sender.split('@')[0]; // Ambil dari reply pesan
+        } else if (m.mentionedJid && m.mentionedJid.length > 0) {
+            num = m.mentionedJid[0].split('@')[0]; // Ambil dari tag
+        }
 
-					// PERBAIKAN: Definisikan variabel format terlebih dahulu
-					let format = parsePhoneNumber(`+${formattedNum}`);
-					
-					if (format) {
-						try {
-							formattedNum = format.getNumber('international') || format.number?.international || formattedNum;
-							let regionCode = format.getRegionCode?.() || format.regionCode || 'ID';
-							let regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
-							country = regionNames.of(regionCode) || 'Unknown';
-						} catch (_) {
-							country = "Unknown";
-						}
-					}
-					// Fallback aman jika library/intl gagal melacak negara
+        if (!num) return m.reply(`Nomor tidak valid!\nContoh: ${prefix + command} 2577101400`);
+        num = num + '@s.whatsapp.net';
+        
+        // 2. Cek pendaftaran di WhatsApp
+        let onWhatsApp = await RAEHAN2GD.onWhatsApp(num);
+        if (!onWhatsApp || !onWhatsApp[0]?.exists) return m.reply('Nomor tersebut tidak terdaftar di WhatsApp!');
+        
+        let img = await RAEHAN2GD.profilePictureUrl(num, 'image').catch(_ => 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
+        let bio = await RAEHAN2GD.fetchStatus(num).catch(_ => ({}));
+        
+        let name = '-';
+        try { 
+            name = await RAEHAN2GD.getName(num); 
+        } catch (_) { 
+            name = store?.contacts?.[num]?.name || store?.contacts?.[num]?.notify || '-'; 
+        }
+        
+        let business = await RAEHAN2GD.getBusinessProfile(num).catch(_ => null);
+        
+        // 3. PERBAIKAN PARSING NEGARA: Support Internasional dengan library 'awesome-phonenumber'
+        let formattedNum = num.split('@')[0];
+        let country = "Unknown";
+        
+        try {
+            let format = parsePhoneNumber(`+${formattedNum}`);
+            if (format && format.valid) {
+                // Ambil format internasional yang rapi
+                formattedNum = format.number?.international || `+${formattedNum}`;
+                let regionCode = format.regionCode || 'ID';
+                // Gunakan 'id' agar output nama negara menggunakan Bahasa Indonesia
+                let regionNames = new Intl.DisplayNames(['id'], { type: 'region' }); 
+                country = regionNames.of(regionCode) || 'Unknown';
+            }
+        } catch (e) {
+            country = "Unknown";
+        }
 
-					let wea = "";
-					if (business) {
-						wea = `
+        let wea = "";
+        
+        // 4. PEMISAHAN LOGIKA TAMPILAN
+        if (business) {
+            wea = `
 ▬▭▬▭▬▭▬▭▬▬▭▬▭
-WHATSAPP BUSINESS 
+*WHATSAPP BUSINESS* 
 ▬▭▬▭▬▭▬▭▬▬▭▬▭
 ╭━━━━━━━━━━━╾•
-├◎ NAMA: ${name ? name : '-'}
-├◎ NOMOR: ${formattedNum}
-├◎ ID: ${business.wid || num}
-├◎ KATEGORI: ${business.category ? business.category : '-'}
+├◎ *NAMA:* ${name}
+├◎ *NOMOR:* ${formattedNum}
+├◎ *ID:* ${business.wid || num.split('@')[0]}
+├◎ *KATEGORI:* ${business.category || '-'}
 ╰━━━━━━━━━━━━╯
 ━━━━━━━━━━━━━
-WEBSITE: ${business.website ? business.website : '-'}
+*WEBSITE:* ${business.website || '-'}
 ━━━━━━━━━━━━━
-EMAIL: ${business.email ? business.email : '-'}
+*EMAIL:* ${business.email || '-'}
 ━━━━━━━━━━━━━
-ADDRESS: ${business.address ? business.address : '-'}
+*ADDRESS:* ${business.address || '-'}
 ━━━━━━━━━━━━━
-DESC: ${business.description ? business.description : '-'}
+*DESC:* ${business.description || '-'}
 ━━━━━━━━━━━━━`;
-					} else {
-						wea = `
+        } else {
+            wea = `
 ▬▭▬▭▬▭▬▭▬▬▭▬▭				
-WHATSAPP STANDAR
+*WHATSAPP STANDAR*
 ▬▭▬▭▬▭▬▭▬▬▭▬▭
 ╭━━━━━━━━━━━╾•
-├◎ NEGARA: ${country.toUpperCase()}
-├◎ NAMA: ${name ? name : '-'}
-├◎ NOMOR: ${formattedNum}
-├◎ LINK: wa.me/${num.split('@')[0]}
-├◎ MENTIONS: @${num.split('@')[0]}
+├◎ *NEGARA:* ${country.toUpperCase()}
+├◎ *NAMA:* ${name}
+├◎ *NOMOR:* ${formattedNum}
+├◎ *LINK:* https://wa.me/${num.split('@')[0]}
+├◎ *MENTIONS:* @${num.split('@')[0]}
 ╰━━━━━━━━━━━━╯
 ━━━━━━━━━━━━━
-STATUS: ${bio?.status || '-'}
-BIO DITETAPKAN: ${bio?.setAt ? moment(bio.setAt).locale('id').format('LL') : '-'}
+*STATUS:* ${bio?.status || '-'}
+*BIO DITETAPKAN:* ${bio?.setAt ? moment(bio.setAt).locale('id').format('LL') : '-'}
 ━━━━━━━━━━━━━`;
-					}
+        }
 
-					await RAEHAN2GD.sendMessage(m.chat, { 
-						image: { url: img }, 
-						caption: wea, 
-						mentions: [m.sender]
-					}, { quoted: fkontak });
+        // 5. PERBAIKAN MENTIONS & QUOTED
+        // Menggunakan 'mentions: [num]' agar tag sukses ke target.
+        // Menggunakan 'quoted: m' agar tidak memunculkan kontak vCard mu sendiri.
+        await RAEHAN2GD.sendMessage(m.chat, { 
+            image: { url: img }, 
+            caption: wea, 
+            mentions: [num] 
+        }, { quoted: m }); 
 
-				} catch (e) {
-					console.error(e);
-					m.reply('Terjadi kesalahan internal saat menjalankan fitur wastalk!');
-				}
-			}
-			break;
-			
+    } catch (e) {
+        console.error(e);
+        m.reply('Terjadi kesalahan internal saat memproses data!');
+    }
+}
+break;			
 			case 'ghstalk': {
 				if (!text) return m.reply(`Example: ${prefix + command} usernamenya`);
 				await sendLoading(m.chat, m);
