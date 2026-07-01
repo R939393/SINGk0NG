@@ -302,7 +302,7 @@ let { key } = await RAEHAN2GD.sendMessage(chatId, { text: 'LOADING SCRIPT RAEHAN
 			}
 			break;
 			case 'sticker': {
-				if (!/image|video|sticker/.test(quoted.type)) return m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}\nDurasi Image/Video/Gif 1-9 Detik`);
+				if (!/image|video|sticker/.test(quoted.type)) return m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}`);
 				let media = await RAEHAN2GD.downloadAndSaveMediaMessage(qmsg);
 				let teks1 = text.split`|`[0] ? text.split`|`[0] : packname;
 				let teks2 = text.split`|`[1] ? text.split`|`[1] : author;
@@ -310,10 +310,9 @@ let { key } = await RAEHAN2GD.sendMessage(chatId, { text: 'LOADING SCRIPT RAEHAN
 					m.react('⏳');
 					await RAEHAN2GD.sendAsSticker(m.chat, media, m, { packname: teks1, author: teks2 });
 				} else if (/video/.test(mime)) {
-					if ((qmsg).seconds > 11) return m.reply('Maksimal 10 detik!');
 					m.react('⏳');
 					await RAEHAN2GD.sendAsSticker(m.chat, media, m, { packname: teks1, author: teks2 });
-				} else m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}\nDurasi Video/Gif 1-9 Detik`);
+				} else m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}`);
 			}
 			break;
 			
