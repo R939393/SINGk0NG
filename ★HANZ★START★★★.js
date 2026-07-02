@@ -140,7 +140,7 @@ async function startRAEHAN2GDBot() {
 		version,
 		logger: level,
 		getMessage,
-		syncFullHistory: false,
+		syncFullHistory: true,
 		browser: Browsers.ubuntu('Chrome'),
 		generateHighQualityLinkPreview: true,
 		auth: {
