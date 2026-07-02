@@ -276,11 +276,12 @@ async function startRAEHAN2GDBot() {
                 let prefix = '.'; 
                 const sections = [
                     {
-                        title: "꧁𓊈𒆜 FITUR KOMUNIKASI💻 𒆜𓊉",
+                        title: "꧁𓊈𒆜 FITUR KOMUNIKASI 💻 𒆜𓊉",
                         rows: [
-                            { title: "✆ WHATSAPP 2 ⌲", id: `${prefix}whtsappp`, description: "JANGAN SPAM" },
+                            { title: "✆ KONTAK WHATSAPP 2 ⌲", id: `${prefix}whtsappp`, description: "JANGAN SPAM" },
+							{ title: "🤖 MENU UTAMA ⌲", id: `${prefix}menu`, description: "MENAMPILKAN SEMUA FITUR" }, 
                             { title: "🅾 INSTAGRAM ⌲", id: `${prefix}sosialmedsos1`}, //description: "Fitur khusus pengaturan bot" },
-                            { title: "☁︎SOUND CLOUD ⌲", id: `${prefix}soundcld`},
+                            { title: "☁︎ SOUND CLOUD ⌲", id: `${prefix}soundcld`},
                               { title: "KENALAN DULU DONG ⌲", id: `${prefix}kenalanajayoooks`},
                             { title: "DONASI ⌲", id: `${prefix}bagidonasi`}
                         ]
