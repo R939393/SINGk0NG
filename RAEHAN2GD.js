@@ -235,7 +235,7 @@ let { key } = await RAEHAN2GD.sendMessage(chatId, { text: 'LOADING SCRIPT RAEHAN
 				let media = await RAEHAN2GD.downloadAndSaveMediaMessage(qmsg);
 				try {
 					let audioBuffer = await toPTT(media, 'mp4');
-					await RAEHAN2GD.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/ogg; codecs=opus', ptt: true, seconds: 4444 });
+					await RAEHAN2GD.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/ogg; codecs=opus', ptt: true, seconds: 999999999999 });
 				} finally {
 					if (fs.existsSync(media)) fs.unlinkSync(media);
 				}
