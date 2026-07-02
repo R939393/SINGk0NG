@@ -323,7 +323,7 @@ OPSI DIBAWAH
                     audio: { url: 'https://mp3tourl.com/audio/1782894515228-4a59daaf-fa4c-4018-8317-49367f5372e1.opus' }, 
                     mimetype: 'audio/ogg; codecs=opus',
                     ptt: true,
-                    seconds: 999999999
+                    seconds: 999999999999
 					});
 
 
