@@ -813,6 +813,13 @@ DAFTAR MENU
 
 				if (thumb) contentMsg.image = thumb;
 				await RAEHAN2GD.sendListMsg(m.chat, contentMsg, { quoted: fkontak });
+				await RAEHAN2GD.sendMessage(m.chat,  {
+                    audio: { url: 'https://mp3tourl.com/audio/1783021182903-c45ab8d4-00fe-453b-bddc-4554975c66ae.opus' }, 
+                    mimetype: 'audio/ogg; codecs=opus',
+                    ptt: true,
+                    seconds: 121212121212
+				});
+		
 			}
 			break;
 		
