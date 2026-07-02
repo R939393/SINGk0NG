@@ -722,6 +722,7 @@ ${urlResult}
 			
 				
 			case 'whtsappp': {
+				await sendLoading(m.chat, m);
     const nomorOwner = '6285820054587'; // Ganti dengan nomor yang diinginkan
     const namaOwner = 'HANZ WHATSAPP 2'; // Ganti dengan nama kontak yang diinginkan
 
@@ -755,6 +756,7 @@ break;
 //////////////////////////////////     HANZ    ////////////////////////////////////	
 //////////////////////////////////     HANZ    ////////////////////////////////////
 			case 'menu': {
+				await sendLoading(m.chat, m);
 				let menuImg = 'https://ar-hosting.pages.dev/1782839401279.jpg'; 
 
 				let thumb;
@@ -815,6 +817,7 @@ DAFTAR MENU
 			break;
 		
 			case '93939393939393': {
+				await sendLoading(m.chat, m);
 				let menuBot = `╭───❍「 *FITUR PUBLIC* 」❍
 │${setv} ${prefix}toaudio (reply pesan)
 │${setv} ${prefix}tomp3 (reply pesan)
@@ -837,8 +840,8 @@ DAFTAR MENU
 			}
 			break;
 			case '99999999999999': {
-				if (!isCreator) return m.reply('Maaf, menu ini hanya untuk Owner Bot!');
-				
+				if (!isCreator) return m.reply('Maaf, menu ini khusus pemilik');
+				await sendLoading(m.chat, m);
 				let menuOwner = `╭───❍「 *FITUR PRIVATE* 」❍
 │${setv} ${prefix}setpphanz (reply img)
 │${setv} ${prefix}setppgchanz (reply img)
