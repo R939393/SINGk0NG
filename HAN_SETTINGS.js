@@ -21,7 +21,7 @@ global.packname = 'UMAT KENTER'
 global.timezone = 'Asia/Makassar' 
 global.locale = 'id' 
 //////////////////////////////////     HANZ    ////////////////////////////////////
-global.listprefix = ["+","!","."]
+global.listprefix = [""]
 global.listv = ['•','●','■','✿','▲','➩','➢','➣','➤','✦','✧','△','❀','○','□','♤','♡','◇','♧','々','〆']
 //////////////////////////////////     HANZ    ////////////////////////////////////
 global.pairing_code = true
