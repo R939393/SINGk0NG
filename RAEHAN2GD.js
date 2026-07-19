@@ -866,6 +866,7 @@ DAFTAR MENU
 				let menuOwner = `╭───❍「 *FITUR PRIVATE* 」❍
 │${setv} ${prefix}setpphanz (reply img)
 │${setv} ${prefix}setppgchanz (reply img)
+│${setv} ${prefix}buatkontak 
 │${setv} ${prefix}buatgc namagc
 │${setv} ${prefix}kick 62xxx / @tag
 │${setv} ${prefix}owh (reply view)
