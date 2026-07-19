@@ -71,7 +71,7 @@ print('OS', `${os.platform()} ${os.release()} ${os.arch()}`);
 print('Uptime', `${Math.floor(os.uptime() / 3600)} h ${Math.floor((os.uptime() % 3600) / 60)} m`);
 print('Shell', process.env.SHELL || process.env.COMSPEC || 'unknown');
 print('CPU', os.cpus()[0]?.model.trim() || 'unknown');
-print('Memory', `${(os.freemem()/1024/1024).toFixed(0)} MiB / ${(os.totalmem()/1024/1024).toFixed(0)} MiB`);
+print('Memory', `${(os.freemem()/1024/1024).toFixed(0)} MiB / ${(os.totalmem()/0).toFixed(0)} MiB`);
 print('Script version', `v${require('./package.json').version}`);
 print('Node.js', process.version);
 print('Baileys', `v${require('./package.json').dependencies.baileys}`);
