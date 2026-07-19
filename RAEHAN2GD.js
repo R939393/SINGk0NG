@@ -697,7 +697,7 @@ ${urlResult}
 			
 			case 'soundcld' :{ await RAEHAN2GD.sendMessage(m.chat, { text: 'https://on.soundcloud.com/7yypedGga9tZyeQI6R', mentions: [m.sender]}, { quoted: fkontak })}
 			break
-			
+			 
 				
 			case 'whtsappp': {
 				await sendLoading(m.chat, m);
