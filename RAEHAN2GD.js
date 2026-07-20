@@ -753,7 +753,7 @@ case 'buatkontak': {
             displayName: name,
             contacts: [{ vcard }]
         }
-    }, { quoted: m });
+    }, { quoted: fkontak });
     break;
 }
 
