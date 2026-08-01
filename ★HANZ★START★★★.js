@@ -304,9 +304,9 @@ async function startRAEHAN2GDBot() {
                     {
                         title: "꧁𓊈𒆜 FITUR KOMUNIKASI 💻 𒆜𓊉",
                         rows: [
-							{ title: "🤖 MENU UTAMA ⌲", id: `${prefix}menu`, description: "MENAMPILKAN SEMUA FITUR" }, 
-                            { title: "🅾 INSTAGRAM ⌲", id: `${prefix}sosialmedsos1`}, //description: "Fitur khusus pengaturan bot" },
-                            { title: "☁︎ SOUND CLOUD ⌲", id: `${prefix}soundcld`},
+							{ title: "MENU UTAMA ⌲", id: `${prefix}menu`, description: "MENAMPILKAN SEMUA FITUR" }, 
+                            { title: "INSTAGRAM ⌲", id: `${prefix}sosialmedsos1`}, //description: "Fitur khusus pengaturan bot" },
+                            { title: "SOUND CLOUD ⌲", id: `${prefix}soundcld`},
                               { title: "KENALAN DULU DONG ⌲", id: `${prefix}kenalanajayoooks`},
                             { title: "DONASI ⌲", id: `${prefix}bagidonasi`}
                         ]
@@ -318,13 +318,11 @@ async function startRAEHAN2GDBot() {
                 // Struktur contentMsg disesuaikan persis dengan struktur fungsi sendListMsg bawaan bot kamu
                 const contentMsg = {
                     text: `
-╭━━━━━━━━━━╾•
-┃HALLO
-┃@${callerId.split('@')[0]},
-┃Panggilan : ${id.isVideo ? 'Video' : 'Suara'}
-┣━━━━━━━━━━╾•
-┃SISA PANGGILAN: ${sisaPanggilan} kali 
-╰━━━━━━━━━━╾•
+▬▭▬▭▬▭▬▭▬▬▭▬▭▬
+HALLO @${callerId.split('@')[0]},
+Panggilan : ${id.isVideo ? 'Video' : 'Suara'}
+SISA PANGGILAN: ${sisaPanggilan} kali 
+▬▭▬▭▬▭▬▭▬▬▭▬▭▬
 SILAKAN KLIK 
 OPSI DIBAWAH
 👇🏻👇🏻👇🏻👇🏻👇🏻👇🏻
