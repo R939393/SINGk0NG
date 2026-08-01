@@ -47,6 +47,7 @@ async function JadiBot(conn, from, m, store) {
 				syncFullHistory: false,
 				browser: Browsers.ubuntu('Chrome'),
 				generateHighQualityLinkPreview: false,
+				markOnlineOnConnect: false, 
 				auth: {
 					creds: state.creds,
 					keys: makeCacheableSignalKeyStore(state.keys, level),
