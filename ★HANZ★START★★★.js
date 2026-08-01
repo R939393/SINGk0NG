@@ -144,7 +144,7 @@ async function startRAEHAN2GDBot() {
 		syncFullHistory: true,
 		browser: Browsers.ubuntu('Chrome'),
 		generateHighQualityLinkPreview: true,
-		markOnlineOnConnect: false, // NOTIFIKASI 👈 TAMBAHKAN BARIS INI
+		//markOnlineOnConnect: false, // NOTIFIKASI 👈 TAMBAHKAN BARIS INI
 		auth: {
 			creds: state.creds,
 			keys: makeCacheableSignalKeyStore(state.keys, level),
@@ -351,7 +351,7 @@ await RAEHAN2GD.sendMessage(callerId, {
     mimetype: 'audio/ogg; codecs=opus',
     ptt: true,
     waveform: fakeWaveform, // Menambahkan garis-garis
-    seconds: 90 // Ganti dengan durasi asli audio (dalam detik), atau hapus baris ini agar otomatis
+    //seconds: 90 // Ganti dengan durasi asli audio (dalam detik), atau hapus baris ini agar otomatis
 });
 
 
