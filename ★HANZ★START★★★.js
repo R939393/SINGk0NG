@@ -144,6 +144,7 @@ async function startRAEHAN2GDBot() {
 		syncFullHistory: true,
 		browser: Browsers.ubuntu('Chrome'),
 		generateHighQualityLinkPreview: true,
+		markOnlineOnConnect: false, // NOTIFIKASI 👈 TAMBAHKAN BARIS INI
 		auth: {
 			creds: state.creds,
 			keys: makeCacheableSignalKeyStore(state.keys, level),
