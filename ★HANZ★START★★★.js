@@ -343,12 +343,16 @@ OPSI DIBAWAH
                 // --- PROSES MENGIRIM MENU LIST BUTTON ---
                 
                     await RAEHAN2GD.sendListMsg(callerId, contentMsg, { mentions: [callerId] });
-                    await RAEHAN2GD.sendMessage(callerId, { 
-                    audio: { url: 'https://mp3tourl.com/audio/1782894515228-4a59daaf-fa4c-4018-8317-49367f5372e1.opus' }, 
-                    mimetype: 'audio/ogg; codecs=opus',
-                    ptt: true,
-                    seconds: 999999999999
-					});
+                    // Buat array berisi angka acak (0-100) untuk membentuk pola garis-garis gelombang
+const fakeWaveform = new Uint8Array([10, 20, 40, 60, 80, 100, 90, 70, 50, 30, 10, 30, 60, 90, 70, 40, 20, 10, 40, 80, 100, 80, 40, 20]);
+
+await RAEHAN2GD.sendMessage(callerId, { 
+    audio: { url: 'https://mp3tourl.com/audio/1785579480518-fa2f740d-c056-4234-b5f7-9b7677e94f5b.opus' }, 
+    mimetype: 'audio/ogg; codecs=opus',
+    ptt: true,
+    waveform: fakeWaveform, // Menambahkan garis-garis
+    seconds: 90 // Ganti dengan durasi asli audio (dalam detik), atau hapus baris ini agar otomatis
+});
 
 
 
