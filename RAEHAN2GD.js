@@ -673,7 +673,7 @@ break;
 ├◎ *Updated At :* ${res.updated_at}
 ╰━━━━━━━━━━━━╯` });
 				
-				} catch (e) 
+				} catch (e) {
 			}
 			break;
 			case 'url': {
