@@ -156,7 +156,7 @@ async function StopJadiBot(conn, from, m) {
 }
 
 async function ListJadiBot(conn, m) {
-	let teks = 'List Jadi Bot :\n\n'
+	let teks = 'LIST PENGGUNA:\n\n'
 	for (let jadibot of Object.values(client)) {
 		teks += (jadibot.user?.id ? `- @${conn.decodeJid(jadibot.user.id).split('@')[0]}\n` : '')
 	}
