@@ -107,7 +107,7 @@ async function JadiBot(conn, from, m, store) {
 						m.reply('Scan again...');
 						StopJadiBot(conn, from, m)
 					} else {
-						m.reply('Anda Sudah Tidak Lagi Menjadi Bot!')
+						m.reply('ANDA SUDAH KELUAR DARI SESI')
 					}
 				}
 				if (connection == 'open') {
@@ -137,7 +137,7 @@ async function JadiBot(conn, from, m, store) {
 
 async function StopJadiBot(conn, from, m) {
 	if (!client[from]) {
-		return conn.sendMessage(m.chat, { text: 'Anda Tidak Sedang jadibot!' }, { quoted: m })
+		return conn.sendMessage(m.chat, { text: 'ANDA SUDAH KELUAR DARI SESI!' }, { quoted: m })
 	}
 	try {
 		const sock = client[from];
@@ -152,7 +152,7 @@ async function StopJadiBot(conn, from, m) {
 		if (err) console.log(chalk.redBright(`[ERROR RMDIR] ${err}`));
 	});
 	
-	return m.reply('Sukses Keluar Dari Sessi Jadi bot')
+	return m.reply('MENGHAPUS SESI SELESAI')
 }
 
 async function ListJadiBot(conn, m) {
