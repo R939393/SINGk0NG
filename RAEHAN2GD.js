@@ -742,38 +742,37 @@ ${urlResult}
 			
 //////////////////////////////////     HANZ    ////////////////////////////////////
 case 'spm': {
-    // Kunci hanya untuk kamu (Owner) biar bot nggak disalahgunakan dan kena banned
     if (!isCreator) return m.reply('Khusus Owner bos! Bahaya kalau dipakai member biasa.');
     
-    // Pengecekan format input
-    if (!text) return m.reply(`Format salah!\nContoh penggunaan:\n${prefix + command} 100|Pesan spamnya`);
+    // Validasi format input
+    if (!text) return m.reply(`Format salah!\nContoh penggunaan:\n${prefix + command} 1000|Pesan spamnya`);
 
-    // Memecah teks berdasarkan karakter '|'
     let argsSpam = text.split('|');
-    if (argsSpam.length < 2) return m.reply(`Gunakan pemisah '|' (garis lurus).\nContoh: ${prefix + command} 100|Teks yang mau dispam`);
+    if (argsSpam.length < 2) return m.reply(`Gunakan pemisah '|' (garis lurus).\nContoh: ${prefix + command} 1000|Teks yang mau dispam`);
     
     let jumlah = parseInt(argsSpam[0].trim());
     let teksSpam = argsSpam[1].trim();
 
-    // Validasi angka
     if (isNaN(jumlah) || jumlah <= 0) return m.reply('Jumlah spam harus berupa angka dan lebih dari 0!');
-    
-    // Batas aman biar nomor bot kamu (Baileys) nggak langsung ditendang pihak WhatsApp
-    
 
     await sendLoading(m.chat, m);
-    m.reply(`SIAP MELUNCUR 🤣 "${teksSpam}" SEBANYAK ${jumlah} KALI...`);
+    m.reply(`🚀 Memulai pengiriman ${jumlah} pesan...\n\n_Catatan: Pengiriman diberi jeda 100ms agar koneksi WhatsApp tetap stabil & tidak terputus._`);
 
-    // Looping pengiriman pesan
+    // Pengiriman beruntun dengan async delay & error handling
     for (let i = 0; i < jumlah; i++) {
-        await RAEHAN2GD.sendMessage(m.chat, { text: teksSpam });
-        
-        // Jeda waktu antar pesan (800 milidetik). 
-        // Wajib dipasang agar sistem WA tidak membaca ini sebagai aktivitas bot brutal.
-        
+        try {
+            await RAEHAN2GD.sendMessage(m.chat, { text: teksSpam });
+            
+            // Memberi jeda 100-200ms per pesan agar tidak terkena rate-limit / terputus
+            await sleep(1); 
+        } catch (err) {
+            console.error(`Gagal mengirim pesan ke-${i + 1}:`, err);
+            // Jeda lebih lama jika terjadi eror koneksi sebelum mencoba lagi
+            await sleep(10);
+        }
     }
     
-    
+    await RAEHAN2GD.sendMessage(m.chat, { text: `✅ Berhasil mengirim ${jumlah} pesan tanpa terputus!` }, { quoted: m });
 }
 break;
 //////////////////////////////////     HANZ    ////////////////////////////////////
