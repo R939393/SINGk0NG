@@ -2,20 +2,16 @@ name: main.yml
 on:
   push:
     branches: [ 932 ]
-  workflow_dispatch: # Tombol manual
+  workflow_dispatch:
 
-# ---> FITUR BARU: MENCEGAH DUPLIKAT <---
-# Concurrency memastikan hanya 1 bot yang berjalan di branch ini. 
-# Jika ada workflow baru terpanggil, yang lama otomatis terganti.
 concurrency:
   group: hanz-bot-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   system-runner:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # <--- MENGGUNAKAN SERVER WINDOWS
     
-    # Izin mutlak agar bot bisa menghapus, membuat workflow, dan write ke repo
     permissions:
       actions: write
       contents: write
@@ -24,7 +20,6 @@ jobs:
       - name: HANZ DOWNLOAD DATA
         uses: actions/checkout@v4
         with:
-          # Sangat penting menggunakan token rahasiamu saat checkout agar diizinkan untuk push kembali
           token: ${{ secrets.GH_TOKEN }} 
 
       - name: HANZ PERSIAPAN
@@ -34,9 +29,9 @@ jobs:
 
       - name: HANZ INSTALL FFPEG & IMAGEMAGICK
         run: |
-          echo "[ HANZ ] Memperbarui paket dan menginstal dependensi media..."
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg imagemagick webp
+          echo "[ HANZ ] Memperbarui paket dan menginstal dependensi media di Windows..."
+          # ---> PERINTAH DIBAWAH INI BERUBAH KHUSUS UNTUK WINDOWS <---
+          choco install ffmpeg imagemagick -y
 
       - name: HANZ BERSIHKAN FAILURE DI AWAL
         env:
@@ -47,29 +42,51 @@ jobs:
           gh run list --status cancelled --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
 
       - name: HANZ ANTI LIMIT ( START )
-        # Batas waktu aman 5,5 jam (335 menit) sebelum ditutup paksa GitHub
         timeout-minutes: 300
         continue-on-error: true
+        # ---> PERINTAH LOOPING SEDIKIT BERBEDA DI WINDOWS (PowerShell) <---
         run: |
-          # [ HANZ ANTI ERORR ]
-          while true; do
+          while ($true) {
             echo " HANZ MEMULAI PROJECT"
-            npm start || true 
+            npm start
             echo " [ HANZ ERORR ] MEMULAI ULANG PROJECT"
-            sleep 1
-          done
+            Start-Sleep -Seconds 1
+          }
 
       - name: HANZ MENYIMPAN DATA KE GITHUB
-        if: always() # Wajib jalan walaupun bot error atau dihentikan limit waktu
+        if: always() 
         run: |
-          echo "[ HANZ ] Mengecek file baru atau perubahan data (seperti sesi login)..."
-          
-          # Konfigurasi identitas Git bot
+          echo "[ HANZ ] Mengecek file baru atau perubahan data..."
           git config --global user.name "R939393"
           git config --global user.email "pejoh0011@gmail.com"
-          
-          # Menambahkan semua file yang berubah, terhapus, atau baru dibuat
           git add .
+          
+          # Cek perbedaan menggunakan PowerShell
+          if (git diff --staged --quiet) {
+            echo "[ HANZ ] Tidak ada file yang berubah untuk disimpan."
+          } else {
+            git commit -m "Update Data Session [skip ci]"
+            git push "https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:932
+            echo "[ HANZ ] Berhasil menyimpan file ke repositori!"
+          }
+
+      - name: HANZ MENGHAPUS PROJECT
+        if: always() 
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo "HANZ MENGHAPUS SEMUA..."
+          gh run list --status completed --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
+          gh run list --status cancelled --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
+          gh run list --status failure --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
+
+      - name: HANZ MEMBUAT ULANG PROJECT 
+        if: always() 
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          echo " HANZ MEMBUAT ULANG PROJECT..."
+          gh workflow run "main.yml" --ref 932          git add .
           
           # Mengecek apakah ada perubahan. Jika ada, lakukan commit & push.
           if git diff --staged --quiet; then
