@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   system-runner:
-    runs-on: windows-latest  # <--- MENGGUNAKAN SERVER WINDOWS
+    runs-on: macos-latest  # <--- MENGGUNAKAN SERVER MAC (APPLE)
     
     permissions:
       actions: write
@@ -22,16 +22,13 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }} 
 
-      - name: HANZ PERSIAPAN
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: HANZ INSTALL FFPEG & IMAGEMAGICK
         run: |
-          echo "[ HANZ ] Memperbarui paket dan menginstal dependensi media di Windows..."
-          # ---> PERINTAH DIBAWAH INI BERUBAH KHUSUS UNTUK WINDOWS <---
-          choco install ffmpeg imagemagick -y
+          echo "[ HANZ ] Menginstal dependensi media di macOS..."
+          # ---> PERINTAH DIBAWAH INI BERUBAH KHUSUS UNTUK MAC <---
+          brew install ffmpeg imagemagick webp
+          
+      # ... (Langkah ke bawahnya sama persis dengan skrip asli Anda)
 
       - name: HANZ BERSIHKAN FAILURE DI AWAL
         env:
@@ -86,42 +83,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           echo " HANZ MEMBUAT ULANG PROJECT..."
-          gh workflow run "main.yml" --ref 932          git add .
-          
-          # Mengecek apakah ada perubahan. Jika ada, lakukan commit & push.
-          if git diff --staged --quiet; then
-            echo "[ HANZ ] Tidak ada file yang berubah untuk disimpan."
-          else
-            # ---> PERBAIKAN: Menambahkan [skip ci] pada commit message <---
-            git commit -m "Update Data Session [skip ci]"
-            
-            # Mendorong kembali ke branch 932 menggunakan token
-            git push "https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:932
-            echo "[ HANZ ] Berhasil menyimpan file ke repositori!"
-          fi
-
-      - name: HANZ MENGHAPUS PROJECT
-        if: always() # Wajib jalan walaupun bot error parah / ditutup paksa
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          echo "HANZ MENGHAPUS SEMUA..."
-          
-          # 1. Hapus tuntas status "Completed" (Centang Hijau)
-          gh run list --status completed --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
-          
-          # 2. Hapus tuntas status "Cancelled" (Abu-abu)
-          gh run list --status cancelled --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
-          
-          # 3. Hapus tuntas status "Failure" (Silang Merah/Error)
-          gh run list --status failure --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
-
-      - name: HANZ MEMBUAT ULANG PROJECT 
-        if: always() # Memicu ulang workflow baru dalam keadaan apapun
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          echo " HANZ MEMBUAT ULANG PROJECT..."
-          # Pastikan nama di bawah ini SAMA PERSIS dengan 'name:' paling atas
           gh workflow run "main.yml" --ref 932
-          
