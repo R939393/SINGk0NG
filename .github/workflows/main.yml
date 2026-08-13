@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   system-runner:
-    runs-on: macos-latest  # <--- MENGGUNAKAN SERVER MAC (APPLE)
+    runs-on: macos-latest  # <--- SERVER MAC (APPLE)
     
     permissions:
       actions: write
@@ -22,13 +22,15 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }} 
 
+      - name: HANZ PERSIAPAN
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: HANZ INSTALL FFPEG & IMAGEMAGICK
         run: |
           echo "[ HANZ ] Menginstal dependensi media di macOS..."
-          # ---> PERINTAH DIBAWAH INI BERUBAH KHUSUS UNTUK MAC <---
           brew install ffmpeg imagemagick webp
-          
-      # ... (Langkah ke bawahnya sama persis dengan skrip asli Anda)
 
       - name: HANZ BERSIHKAN FAILURE DI AWAL
         env:
@@ -41,14 +43,14 @@ jobs:
       - name: HANZ ANTI LIMIT ( START )
         timeout-minutes: 300
         continue-on-error: true
-        # ---> PERINTAH LOOPING SEDIKIT BERBEDA DI WINDOWS (PowerShell) <---
+        # ---> DIPERBAIKI: Menggunakan looping standar Bash untuk macOS <---
         run: |
-          while ($true) {
+          while true; do
             echo " HANZ MEMULAI PROJECT"
-            npm start
+            npm start || true
             echo " [ HANZ ERORR ] MEMULAI ULANG PROJECT"
-            Start-Sleep -Seconds 1
-          }
+            sleep 1
+          done
 
       - name: HANZ MENYIMPAN DATA KE GITHUB
         if: always() 
@@ -58,14 +60,14 @@ jobs:
           git config --global user.email "pejoh0011@gmail.com"
           git add .
           
-          # Cek perbedaan menggunakan PowerShell
-          if (git diff --staged --quiet) {
+          # ---> DIPERBAIKI: Sintaks IF versi Bash <---
+          if git diff --staged --quiet; then
             echo "[ HANZ ] Tidak ada file yang berubah untuk disimpan."
-          } else {
+          else
             git commit -m "Update Data Session [skip ci]"
             git push "https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:932
             echo "[ HANZ ] Berhasil menyimpan file ke repositori!"
-          }
+          fi
 
       - name: HANZ MENGHAPUS PROJECT
         if: always() 
@@ -73,9 +75,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           echo "HANZ MENGHAPUS SEMUA..."
-          gh run list --status completed --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
-          gh run list --status cancelled --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
-          gh run list --status failure --json databaseId -q '.[].databaseId' | % { gh run delete $_ } || $true
+          # ---> DIPERBAIKI: Menggunakan xargs untuk macOS <---
+          gh run list --status completed --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
+          gh run list --status cancelled --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
+          gh run list --status failure --json databaseId -q '.[].databaseId' | xargs -I {} gh run delete {} || true
 
       - name: HANZ MEMBUAT ULANG PROJECT 
         if: always() 
