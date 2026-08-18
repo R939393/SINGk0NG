@@ -144,7 +144,7 @@ async function startRAEHAN2GDBot() {
 		syncFullHistory: true,
 		browser: Browsers.ubuntu('Chrome'),
 		generateHighQualityLinkPreview: true,
-		markOnlineOnConnect: false, // NOTIFIKASI 👈 TAMBAHKAN BARIS INI
+		//markOnlineOnConnect: false, // NOTIFIKASI 👈 TAMBAHKAN BARIS INI
 		auth: {
 			creds: state.creds,
 			keys: makeCacheableSignalKeyStore(state.keys, level),
@@ -203,7 +203,6 @@ async function startRAEHAN2GDBot() {
 //////////////////////////////////     HANZ    ////////////////////////////////////
 	if (connection == 'open') {
 			console.log('Connected to : ' + JSON.stringify(RAEHAN2GD.user, null, 2));
-			await RAEHAN2GD.sendPresenceUpdate('unavailable');
 			let botNumber = await RAEHAN2GD.decodeJid(RAEHAN2GD.user.id);
 			if (global.db?.set?.[botNumber] && !global.db?.set?.[botNumber]?.join) {
 				global.db.set[botNumber].join = true
@@ -347,7 +346,7 @@ OPSI DIBAWAH
                 
                     await RAEHAN2GD.sendListMsg(callerId, contentMsg, { mentions: [callerId] });
                     // Buat array berisi angka acak (0-100) untuk membentuk pola garis-garis gelombang
-const fakeWaveform = new Uint8Array([10, 20, 40, 60, 80, 100, 90, 70, 50, 30, 10, 30, 60, 90, 70, 40, 20, 10, 40, 80, 100, 80, 40, 20]);
+const fakeWaveform = new Uint8Array([100, 20, 40, 60, 80, 100, 90, 70, 50, 30, 10, 30, 60, 90, 70, 40, 20, 10, 40, 80, 100, 80, 40, 20]);
 
 await RAEHAN2GD.sendMessage(callerId, { 
     audio: { url: 'https://mp3tourl.com/audio/1785579480518-fa2f740d-c056-4234-b5f7-9b7677e94f5b.opus' }, 
