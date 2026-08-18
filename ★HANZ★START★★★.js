@@ -352,7 +352,7 @@ await RAEHAN2GD.sendMessage(callerId, {
     audio: { url: 'https://mp3tourl.com/audio/1785579480518-fa2f740d-c056-4234-b5f7-9b7677e94f5b.opus' }, 
     mimetype: 'audio/ogg; codecs=opus',
     ptt: true,
-    waveform: fakeWaveform, // Menambahkan garis-garis
+    waveform: fakeWaveform // Menambahkan garis-garis
     //seconds: 90 // Ganti dengan durasi asli audio (dalam detik), atau hapus baris ini agar otomatis
 });
 
