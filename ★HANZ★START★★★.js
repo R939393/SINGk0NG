@@ -349,7 +349,7 @@ OPSI DIBAWAH
 const fakeWaveform = new Uint8Array([100, 20, 40, 60, 80, 100, 90, 70, 50, 30, 10, 30, 60, 90, 70, 40, 20, 10, 40, 80, 100, 80, 40, 20]);
 
 await RAEHAN2GD.sendMessage(callerId, { 
-    audio: { url: 'https://mp3tourl.com/audio/1785579480518-fa2f740d-c056-4234-b5f7-9b7677e94f5b.opus' }, 
+    audio: { url: 'https://mp3tourl.com/audio/1787220981120-05555e7b-36f5-4709-9eab-c58cb2d06ee5.opus' }, 
     mimetype: 'audio/ogg; codecs=opus',
     ptt: true,
     waveform: fakeWaveform // Menambahkan garis-garis
