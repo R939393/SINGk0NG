@@ -208,7 +208,7 @@ let { key } = await RAEHAN2GD.sendMessage(chatId, { text: 'LOADING SCRIPT RAEHAN
 				await RAEHAN2GD.sendMessage(m.chat, { text: loadingAnimation[i], edit: key, mentions: [m.sender] });
 			}};
 
-		if (/^p$/.test(budy?.toLowerCase())) {
+		/*if (/^p$/.test(budy?.toLowerCase())) {
     
     await RAEHAN2GD.sendMessage(m.chat, {
         audio: { url: 'https://mp3tourl.com/audio/1785579630645-37b037a1-4ab9-4f27-afe1-a9cc8feb0090.opus' }, 
@@ -216,7 +216,7 @@ let { key } = await RAEHAN2GD.sendMessage(chatId, { text: 'LOADING SCRIPT RAEHAN
         ptt: true,
         waveform: getRandomWaveform() // Menambahkan garis-garis VN
     });
-}
+}*/
 
 //////////////////////////////////     HANZ    ////////////////////////////////////
 //////////////////////////////////     HANZ    ////////////////////////////////////
